@@ -95,6 +95,7 @@ CREATE TABLE `PrintServiceLog` (
 CREATE TABLE `PurchaseLog` (
     `id` VARCHAR(191) NOT NULL,
     `customerId` VARCHAR(191) NOT NULL,
+    `orderId` VARCHAR(191) NOT NULL,
     `transactionTime` DATETIME(3) NOT NULL,
     `numberOfPage` INTEGER NOT NULL,
     `price` DOUBLE NOT NULL,

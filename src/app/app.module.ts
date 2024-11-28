@@ -6,6 +6,8 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from 'src/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from 'src/common/guards';
+import { CustomerModule } from 'src/customer/customer.module';
+import { SPSOModule } from 'src/spso/spso.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { JwtGuard } from 'src/common/guards';
     AuthModule,
     PassportModule.register({ session: true }),
     UserModule,
+    CustomerModule,
+    SPSOModule,
   ],
   providers: [
     {

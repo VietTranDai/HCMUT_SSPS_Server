@@ -35,11 +35,8 @@ enum PrintSideType {
 
 // Chọn kích thước giấy in
 enum PageSize {
-  A1
-  A2
   A3
   A4
-  A5
 }
 
 // Trạng thái của tài liệu
@@ -106,7 +103,7 @@ model Spso {
 model Customer {
   id          String  @id
   idInSchool  String? // Mã số sinh viên/giáo viên
-  currentPage Int     @default(0) // Số trang đã in
+  currentPage Int     @default(0)
   user        User    @relation(fields: [id], references: [id], name: "UserToCustomer")
 
   Document        Document[]
@@ -118,7 +115,7 @@ model Customer {
 
 // Model của PrinterLocation
 model PrinterLocation {
-  id String @id
+  id String @id @default(uuid())
 
   campusName   String // Tên khuôn viên (campus) chứa máy in
   buildingName String // Tên tòa nhà (building) chứa máy in
@@ -132,7 +129,7 @@ model PrinterLocation {
 
 // Model của Printer
 model Printer {
-  id        String   @id
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) // Ngày giờ tạo (tự động ghi nhận thời gian tạo)
   updatedAt DateTime @updatedAt // Ngày giờ cập nhật (tự động ghi nhận thời gian cập nhật)
 
@@ -156,16 +153,20 @@ model Document {
   Customer   Customer @relation(fields: [customerId], references: [id])
   customerId String
 
-  PrintLogId String
-  PrintLog   PrintServiceLog @relation(fields: [PrintLogId], references: [id])
+  printLogId String?
+  PrintLog   PrintServiceLog? @relation(fields: [printLogId], references: [id])
 
-  fileName       String // Tên tài liệu
-  fileType       String // Loại tài liệu (pdf, docx, pptx, ...)
-  totalPage      Int // Số trang của tài liệu
-  printSideType  PrintSideType // Kiểu in (1 mặt hoặc 2 mặt)
-  pageSize       PageSize // Kích thước giấy in (A3, A4)
-  pageToPrint    Json // Trang cần in (mảng các trang cần in)
-  numOfCop       Int // Số bản sao
+  fileName String // Tên tài liệu
+  fileType String // Loại tài liệu (pdf, docx, pptx, ...)
+
+  totalCostPage Int // Số trang của tài liệu
+
+  printSideType PrintSideType // Kiểu in (1 mặt hoặc 2 mặt)
+
+  pageSize    PageSize // Kích thước giấy in (A3, A4)
+  pageToPrint Json // Trang cần in (mảng các trang cần in)
+  numOfCop    Int // Số bản sao
+
   documentStatus DocumentStatus // Trạng thái tài liệu (PENDING, IS_PRINTING, COMPLETED, FAILED)
   fileContent    Bytes // Nội dung tài liệu (file pdf, docx, pptx, ...)
 }
@@ -181,13 +182,13 @@ model PrintServiceLog {
   printerId String
   printer   Printer @relation(fields: [printerId], references: [id])
 
-  Document Document[]
+  documents Document[]
 
   startTime DateTime? // Thời gian bắt đầu in
   endTime   DateTime? // Thời gian kết thúc in
 
   serviceStatus ServiceStatus // Trạng thái dịch vụ in (PENDING, IS_PRINTING, COMPLETED, FAILED)
-  totalPage     Json // Số trang đã in 
+  totalPageCost Int // Số trang đã in 
 }
 
 model PurchaseLog {
@@ -196,7 +197,9 @@ model PurchaseLog {
   customerId String // ID của khách hàng
   customer   Customer @relation(fields: [customerId], references: [id])
 
-  transactionTime DateTime // Thời gian giao dịch
+  orderId String // Mã đơn hàngs
+
+  transactionTime DateTime       @default(now()) // Thời gian giao dịch
   numberOfPage    Int // Số trang đã in
   price           Float // Giá tiền
   purchaseStatus  PurchaseStatus // Trạng thái giao dịch (PENDING, COMPLETED, FAILED)
@@ -228,11 +231,16 @@ model defaultConfiguration {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
-  spsoId              String
-  spso                Spso     @relation(fields: [spsoId], references: [id])
-  defaultPage         Int // Số trang mặc định
-  permittedFileTypes  Json // Loại file được phép in
-  defaultGivenDate    DateTime // Ngày in mặc định
+  spsoId String
+  spso   Spso   @relation(fields: [spsoId], references: [id])
+
+  firstTermGivenDate  DateTime @default(now()) // Ngày cấp giấy kỳ 1 (Tháng 9)
+  secondTermGivenDate DateTime @default(now()) // Ngày cấp giấy kỳ 2 (Tháng 1)
+  thirdTermGivenDate  DateTime @default(now()) // Ngày cấp giấy kỳ 3 (Tháng 6)
+
+  defaultPage        Int // Số trang mặc định
+  permittedFileTypes Json // Loại file được phép in
+
   isLastConfiguration Boolean // Cấu hình cuối cùng
 }
 
