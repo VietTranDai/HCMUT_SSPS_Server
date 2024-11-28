@@ -1,10 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import { DocumentStatus, PageSize, PrismaClient } from '@prisma/client';
 import { customersData } from './data/customer';
 import { UserRole } from '@prisma/client';
 import { spsoData } from './data/spso';
 import { printerLocationsData } from './data/printerLocation';
 import { printersData } from './data/printer';
 import { adminData } from './data/admin';
+import { purchaseLogData } from './data/purchaseLog';
+import { defaultConfigurationData } from './data/defaultConfig';
+import { documentData } from './data/documentData';
 
 const prisma = new PrismaClient();
 
@@ -63,7 +66,6 @@ async function main() {
     printerLocationsData.map(async (printerLocation) => {
       await prisma.printerLocation.create({
         data: {
-          id: printerLocation.id,
           campusName: printerLocation.campusName,
           buildingName: printerLocation.buildingName,
           roomName: printerLocation.roomName,
@@ -77,15 +79,116 @@ async function main() {
 
   await Promise.all(
     printersData.map(async (printer) => {
-      await prisma.printer.create({
+      const location = await prisma.printerLocation.findFirst({
+        where: {
+          campusName: printer.campusName,
+          buildingName: printer.buildingName,
+          roomName: printer.roomName,
+        },
+      });
+
+      if (location) {
+        await prisma.printer.create({
+          data: {
+            brandName: printer.brandName,
+            model: printer.model,
+            locationId: location.id,
+            shortDescription: printer.shortDescription,
+            printerStatus: printer.printerStatus,
+            isInProgress: printer.isInProgress,
+          },
+        });
+      }
+    }),
+  );
+
+  await Promise.all(
+    purchaseLogData.map(async (purchaseLog) => {
+      // Tìm `id` của Customer dựa trên `idInSchool`
+      const customer = await prisma.customer.findFirst({
+        where: { idInSchool: purchaseLog.customerId },
+      });
+
+      // Nếu không tìm thấy Customer, bỏ qua hoặc xử lý lỗi
+      if (!customer) {
+        console.error(
+          `Customer with idInSchool ${purchaseLog.customerId} not found`,
+        );
+        return;
+      }
+
+      // Sử dụng `id` của Customer để tạo bản ghi `PurchaseLog`
+      await prisma.purchaseLog.create({
         data: {
-          id: printer.id,
-          brandName: printer.brandName,
-          model: printer.model,
-          locationId: printer.locationId,
-          shortDescription: printer.shortDescription,
-          printerStatus: printer.printerStatus,
-          isInProgress: printer.isInProgress,
+          customerId: customer.id, // Sử dụng `id` của Customer
+          orderId: purchaseLog.orderId,
+          transactionTime: purchaseLog.transactionTime,
+          numberOfPage: purchaseLog.numberOfPage,
+          price: purchaseLog.price,
+          purchaseStatus: purchaseLog.purchaseStatus,
+        },
+      });
+    }),
+  );
+
+  await Promise.all(
+    defaultConfigurationData.map(async (defaultConfig) => {
+      const cur_email = 'viet.trankhmtbk22@hcmut.edu.vn';
+      const spso = await prisma.spso.findFirst({
+        where: { user: { email: cur_email } },
+      });
+
+      // Nếu không tìm thấy SPSO, bỏ qua hoặc xử lý lỗi
+      if (!spso) {
+        console.error(`SPSO with email ${cur_email} not found`);
+        return;
+      }
+
+      await prisma.defaultConfiguration.create({
+        data: {
+          defaultPage: defaultConfig.defaultPage,
+          permittedFileTypes: defaultConfig.permittedFileTypes,
+          firstTermGivenDate: defaultConfig.firstTermGivenDate,
+          secondTermGivenDate: defaultConfig.secondTermGivenDate,
+          thirdTermGivenDate: defaultConfig.thirdTermGivenDate,
+          isLastConfiguration: defaultConfig.isLastConfiguration,
+          spsoId: spso.id,
+        },
+      });
+    }),
+  );
+
+  await Promise.all(
+    documentData.map(async (documentData) => {
+      const customer = await prisma.customer.findFirst({
+        where: { idInSchool: documentData.customerId },
+      });
+
+      if (!customer) {
+        console.error(
+          `Customer with idInSchool ${documentData.customerId} not found`,
+        );
+        return;
+      }
+
+      // Tính toán `totalCostPage` dựa trên `pageSize`, `pageToPrint`, `numOfCop`
+      const totalCostPage =
+        (documentData.pageSize === PageSize.A4 ? 1 : 2) *
+        documentData.pageToPrint.length *
+        documentData.numOfCop;
+
+      await prisma.document.create({
+        data: {
+          customerId: customer.id,
+          fileName: documentData.fileName,
+          fileType: documentData.fileType,
+          totalCostPage: totalCostPage,
+          printSideType: documentData.printSideType,
+          pageSize: documentData.pageSize,
+          pageToPrint: documentData.pageToPrint,
+          numOfCop: documentData.numOfCop,
+          documentStatus: DocumentStatus.COMPLETED,
+          fileContent: Buffer.from(documentData.fileContent, 'base64'),
         },
       });
     }),

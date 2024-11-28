@@ -12,7 +12,7 @@ import { AUTH_MESSAGES } from 'src/common/message/auth.message';
 import { AuthService } from './auth.service';
 import { UserRole } from '@prisma/client';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -22,6 +22,7 @@ export class AuthController {
   @Get('google/login')
   handleGoogleLogin() {
     // initiate google login flow
+
     return { msg: 'Google authentication' };
   }
 
