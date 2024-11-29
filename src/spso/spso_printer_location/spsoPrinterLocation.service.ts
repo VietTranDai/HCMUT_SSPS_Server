@@ -10,6 +10,20 @@ export class SPSOPrinterLocationService {
     ALL SERVICE FOR GET METHOD
   */
 
+  async getLocationById(locationId: string) {
+    const location = await this.prisma.printerLocation.findUnique({
+      where: { id: locationId },
+    });
+
+    if (!location) {
+      throw new BadRequestException(
+        `Printer location with ID ${locationId} not found`,
+      );
+    }
+
+    return location;
+  }
+
   /*
     ALL SERVICE FOR POST METHOD
   */

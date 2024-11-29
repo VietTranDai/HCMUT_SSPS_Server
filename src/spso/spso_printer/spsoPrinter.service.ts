@@ -19,12 +19,17 @@ export class SPSOPrinterService {
   */
   // Lấy tất cả máy in trong hệ thống
   async getAllPrinters() {
-    return await this.prisma.printer.findMany();
+    return await this.prisma.printer.findMany({
+      include: { location: true },
+    });
   }
 
   // Lấy thông tin chi tiết máy in theo ID
   async getPrinterDetails(id: string) {
-    const printer = await this.prisma.printer.findUnique({ where: { id } });
+    const printer = await this.prisma.printer.findUnique({
+      where: { id },
+      include: { location: true },
+    });
 
     if (!printer) {
       throw new BadRequestException(`Printer with ID ${id} not found`);
@@ -121,6 +126,7 @@ export class SPSOPrinterService {
         isInProgress,
         locationId,
       },
+      include: { location: true },
     });
   }
 

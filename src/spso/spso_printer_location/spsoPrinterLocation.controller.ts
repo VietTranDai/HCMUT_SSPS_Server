@@ -32,6 +32,69 @@ export class SPSOPrinterLocationController {
   /*        
         ALL CONTROLLER FOR GET METHOD
     */
+
+  @Get('get-by-id/:locationId')
+  @ApiOperation({
+    summary: 'Retrieve printer location by ID',
+    description: 'Retrieve printer location details by ID.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved printer location.',
+    schema: {
+      example: {
+        statusCode: 200,
+        message: 'Successfully retrieved printer location',
+        data: {
+          id: 'A1-101',
+          campusName: 'CS1',
+          buildingName: 'A1',
+          roomName: 'A1-101',
+          campusAdress: '268 Lý Thường Kiệt, P.14, Q.10, Tp. HCM',
+          hotline: '(+84) 28 38652 442',
+          description: 'Administrative Office and Support Center',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Printer location not found.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Printer location not found',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
+    schema: {
+      example: {
+        statusCode: 500,
+        message: 'An unexpected error occurred',
+      },
+    },
+  })
+  async getPrinterLocationById(@Param('locationId') locationId: string) {
+    try {
+      const printerLocation =
+        await this.spsoPrinterLocationService.getLocationById(locationId);
+
+      return {
+        statusCode: 200,
+        message: 'Successfully retrieved printer location',
+        data: printerLocation,
+      };
+    } catch (error) {
+      const message = error?.message || 'An unexpected error occurred';
+      const status = error?.status || HttpStatus.INTERNAL_SERVER_ERROR;
+
+      throw new HttpException(message, status);
+    }
+  }
+
   /*
         ALL CONTROLLER FOR POST METHOD
     */
