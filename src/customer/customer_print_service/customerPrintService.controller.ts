@@ -106,7 +106,6 @@ export class CustomerPrintServiceController {
           searchPrintServiceLogReq,
         );
 
-      console.log('logs', logs);
       return {
         statusCode: 201,
         message: 'Filtered print service logs retrieved successfully',
