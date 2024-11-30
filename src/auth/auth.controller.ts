@@ -28,16 +28,21 @@ export class AuthController {
 
   @Public()
   @Get('google/redirect')
-  async redirect(@Query('code') code: string, @Query('role') role: UserRole) {
+  async redirect(
+    @Query('code') code: string,
+    @Query('role') role?: UserRole,
+    @Query('redirectUrl') redirectUrl?: string,
+  ) {
     if (!code) {
       throw new ForbiddenException(AUTH_MESSAGES.AUTHORIZATION_CODE_REQUIRED);
     }
 
+    if (!role) role = UserRole.CUSTOMER;
     console.log('Code', code);
 
     // Lấy thông tin người dùng từ Google
     const { email, family_name, given_name, picture } =
-      await this.authService.verifyUser(code);
+      await this.authService.verifyUser(code, redirectUrl);
 
     console.log('Email', email);
     console.log('Family Name', family_name);

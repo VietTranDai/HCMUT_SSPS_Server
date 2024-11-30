@@ -41,9 +41,13 @@ export class AuthService {
     });
   }
 
-  async verifyUser(code: string) {
+  async verifyUser(code: string, redirectUrl?: string) {
     try {
-      const { tokens } = await this.oauth2Client.getToken(code);
+      if (!redirectUrl) redirectUrl = this.config.get('GOOGLE_REDIRECT_URI');
+      const { tokens } = await this.oauth2Client.getToken({
+        code,
+        redirect_uri: redirectUrl,
+      });
 
       const options = {
         idToken: tokens.id_token,
