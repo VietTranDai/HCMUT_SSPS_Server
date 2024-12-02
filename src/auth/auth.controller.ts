@@ -38,7 +38,6 @@ export class AuthController {
     }
 
     if (!role) role = UserRole.CUSTOMER;
-    console.log('Code', code);
 
     // Lấy thông tin người dùng từ Google
     const { email, family_name, given_name, picture } =
