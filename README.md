@@ -289,6 +289,52 @@ Dưới đây là một số lệnh cơ bản để tương tác với NestJS v�
 
 <a id="contact"></a>
 
+## Tài liệu Liên Quan
+
+Dưới đây là danh sách các tài liệu quan trọng liên quan đến dự án:
+
+#### 1. Mô Tả Và Phân Tích Các Yêu Cầu Của hệ thống
+
+- Mô tả chi tiết về hệ thống HCMUT_SSPS, các tính năng, và mục tiêu của dịch vụ in thông minh dành cho sinh viên.
+- Các yêu cầu chức năng và phi chức năng của hệ thống, bao gồm các tính năng cần có cho từng đối tượng sử dụng trong dự án.
+- Xem tài liệu chi tiết tại đây: [project_description.pdf](docs/project_description.pdf)
+
+#### 2. Sơ Đồ Use-Case
+
+- Sơ đồ use-case của hệ thống HCMUT_SSPS, mô tả các chức năng chính mà người dùng có thể tương tác.
+- Xem tài liệu chi tiết tại đây: [use_case_diagram.pdf](docs/use_case_diagram.pdf)
+
+#### 3. Kiến Trúc Hệ Thống
+
+- Mô tả kiến trúc của hệ thống HCMUT_SSPS, bao gồm các lớp và chiến lược triển khai giao diện người dùng, lưu trữ dữ liệu, và kết nối với các API bên ngoài.
+- Xem tài liệu chi tiết tại đây: [system_architecture.pdf](docs/system_architecture.pdf)
+
+#### 4. System Modelling
+
+- Mô tả quy trình kinh doanh giữa các hệ thống và người dùng trong một mô-đun cụ thể của hệ thống qua các Activity Diagram.
+- Mô hình dãy thời gian mô tả tương tác giữa các đối tượng trong hệ thống, được sử dụng trong các tình huống cụ thể, được mô tả qua các Sequence Diagram.
+- Component Diagram, mô tả các lớp đối tượng trong mô-đun, các thuộc tính và phương thức của chúng.
+- Xem tài liệu chi tiết tại đây: [system_modelling.pdf](docs/system_modelling.pdf)
+
+#### 5. Giao Diện Người Dùng - MVP 1
+
+- Giao diện người dùng mẫu cho phiên bản MVP 1, bao gồm các màn hình cơ bản của hệ thống in thông minh cho sinh viên.
+- Xem tài liệu chi tiết tại đây: [mvp1_wireframe.pdf](docs/mvp1_wireframe.pdf)
+
+#### 6. Báo Cáo Kiểm Thử Usability
+
+- Báo cáo kiểm thử tính khả dụng (usability test) của giao diện người dùng MVP 1, bao gồm các bước và kết quả thu thập từ người dùng thử nghiệm.
+- Xem tài liệu chi tiết tại đây: [usability_test_report.pdf](docs/usability_test_report.pdf)
+
+#### 7. Hướng Dẫn Sử Dụng API
+
+- Xem chi tiết về cách sử dụng API của hệ thống HCMUT_SSPS, bao gồm các endpoint và cách tương tác với hệ thống, bằng cách chạy server ở local sau đó vào đường dẫn [http://localhost:8080/api](http://localhost:8080/api) để xem Api document do Swagger tích hợp cung cấp.
+
+#### 8. Hướng Dẫn Cài Đặt Git, Github Và Áp Dụng GitFlow vào dự án
+
+- Hướng dẫn chi tiết về cách thiết lập hệ thống kiểm soát phiên bản sử dụng Git và Github cho dự án.
+- Xem tài liệu chi tiết tại đây: [git-flow.md](docs/git-flow//git-flow.md)
+
 ## Liên hệ
 
 Mọi thắc mắc, báo lỗi, đề xuất tính năng cho ứng dụng xin hay liên hệ qua địa chỉ email: viet.trankhmtbk22@hcmut.edu.vn
