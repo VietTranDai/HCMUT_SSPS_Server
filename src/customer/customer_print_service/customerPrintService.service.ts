@@ -189,6 +189,19 @@ export class CustomerPrintServiceService {
       totalPageCost += document.totalCostPage;
     }
 
+    // check current balance of customer
+    if (customer.currentPage < totalPageCost) {
+      throw new BadRequestException(
+        `Customer ID ${customerId} does not have enough balance`,
+      );
+    }
+
+    // Trừ tiền khách hàng
+    await this.prisma.customer.update({
+      where: { id: customerId },
+      data: { currentPage: { decrement: totalPageCost } },
+    });
+
     let printServiceLog = await this.prisma.printServiceLog.create({
       data: {
         customerId,
