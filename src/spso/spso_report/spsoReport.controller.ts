@@ -9,6 +9,7 @@ import {
   Param,
   Post,
   Query,
+  Res,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -19,6 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators/public.decorators';
 import { SPSOReportService } from './spsoReport.service';
+import { Response } from 'express';
 
 @Public()
 // @ApiBearerAuth()
@@ -27,7 +29,7 @@ import { SPSOReportService } from './spsoReport.service';
 export class SPSOReportController {
   constructor(private readonly spsoReportService: SPSOReportService) {}
 
-  @Get(':id/download')
+  @Get(':id/get_file')
   @ApiOperation({ summary: 'Download periodic report as Base64' })
   @ApiResponse({
     status: 200,
@@ -38,7 +40,7 @@ export class SPSOReportController {
     status: 400,
     description: 'Report not found.',
   })
-  async downloadReport(@Param('id') id: string) {
+  async get_file(@Param('id') id: string) {
     console.log('checking id', id);
     try {
       const base64Content =
@@ -54,6 +56,23 @@ export class SPSOReportController {
 
       throw new HttpException(message, status);
     }
+  }
+
+  @Get(':id/download')
+  async downloadReport(@Param('id') id: string, @Res() res: Response) {
+    const report = await this.spsoReportService.getReportById(id);
+
+    if (!report) {
+      return res.status(HttpStatus.NOT_FOUND).send('Report not found');
+    }
+
+    // Thiết lập header và trả nội dung
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${report.title}.pdf"`,
+    });
+
+    res.send(Buffer.from(report.reportContent));
   }
 
   @Get('get-all')

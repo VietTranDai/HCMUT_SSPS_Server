@@ -91,6 +91,12 @@ export class SPSOReportService {
     });
   }
 
+  async getReportById(reportId: string) {
+    return this.prisma.periodicReport.findUnique({
+      where: { id: reportId },
+    });
+  }
+
   // Hàm tạo báo cáo cho một tháng bất kỳ
   async generateReportForMonth(month: number, year: number): Promise<string> {
     // Kiểm tra tháng và năm hợp lệ
@@ -106,6 +112,30 @@ export class SPSOReportService {
       year,
       now.toISOString(),
     );
+
+    const report = await this.prisma.periodicReport.findFirst({
+      where: {
+        title: `Monthly_Report_${month}_${year}.pdf`,
+      },
+    });
+
+    if (!report) {
+      await this.saveReport(
+        `Monthly_Report_${month}_${year}.pdf`,
+        pdfBuffer,
+        'MONTHLY',
+      );
+    } else {
+      // Nếu báo cáo đã tồn tại, cập nhật nội dung mới
+      await this.prisma.periodicReport.update({
+        where: {
+          id: report.id,
+        },
+        data: {
+          reportContent: pdfBuffer,
+        },
+      });
+    }
     return pdfBuffer.toString('base64'); // Chuyển sang Base64 để trả về
   }
 
@@ -122,6 +152,27 @@ export class SPSOReportService {
       year,
       now.toISOString(),
     );
+
+    const report = await this.prisma.periodicReport.findFirst({
+      where: {
+        title: `Yearly_Report_${year}.pdf`,
+      },
+    });
+
+    if (!report) {
+      await this.saveReport(`Yearly_Report_${year}.pdf`, pdfBuffer, 'YEARLY');
+    } else {
+      // Nếu báo cáo đã tồn tại, cập nhật nội dung mới
+      await this.prisma.periodicReport.update({
+        where: {
+          id: report.id,
+        },
+        data: {
+          reportContent: pdfBuffer,
+        },
+      });
+    }
+
     return pdfBuffer.toString('base64'); // Chuyển sang Base64 để trả về
   }
 
