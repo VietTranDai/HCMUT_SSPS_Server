@@ -24,6 +24,38 @@ export class SPSOReportService {
     });
   }
 
+  // Tự động check đã có báo cáo cho hàng tháng và năm cho 2024 chưa, nếu chưa thì tạo
+  @Cron('* * * * *') // Chạy mỗi phút
+  async checkAndGenerateReports() {
+    const year = 2024;
+
+    for (let month = 1; month <= 12; month++) {
+      // Kiểm tra báo cáo hàng tháng cho năm hiện tại
+      const monthlyReport = await this.prisma.periodicReport.findFirst({
+        where: {
+          title: `Monthly_Report_${month}_${year}.pdf`,
+        },
+      });
+
+      if (!monthlyReport) {
+        await this.generateReportForMonth(month, year);
+        console.log(`Generated monthly report for ${month}/${year}`);
+      }
+    }
+
+    // Kiểm tra báo cáo hàng năm cho năm hiện tại
+    const yearlyReport = await this.prisma.periodicReport.findFirst({
+      where: {
+        title: `Yearly_Report_${year}.pdf`,
+      },
+    });
+
+    if (!yearlyReport) {
+      await this.generateReportForYear(year);
+      console.log(`Generated yearly report for ${year}`);
+    }
+  }
+
   // Tự động tạo báo cáo hàng tháng
   @Cron('59 23 28 * *') // Chạy vào cuối tháng
   async generateMonthlyReport() {
