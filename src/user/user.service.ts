@@ -15,20 +15,36 @@ export class UserService {
     picture: string,
     role: UserRole,
   ) {
-    return await this.prisma.user.create({
-      data: {
-        email: email,
-        role: role,
-        familyName: familyName,
-        givenName: givenName,
-        avatar: picture,
-        customer: {
-          create: {
-            currentPage: 0,
+    if (role === UserRole.CUSTOMER)
+      return await this.prisma.user.create({
+        data: {
+          email: email,
+          role: role,
+          familyName: familyName,
+          givenName: givenName,
+          avatar: picture,
+          customer: {
+            create: {
+              currentPage: 0,
+            },
           },
         },
-      },
-    });
+      });
+    else
+      return await this.prisma.user.create({
+        data: {
+          email: email,
+          role: role,
+          familyName: familyName,
+          givenName: givenName,
+          avatar: picture,
+          spso: {
+            create: {
+              phoneNumber: '0123456789',
+            },
+          },
+        },
+      });
   }
 
   // GET SERVICE

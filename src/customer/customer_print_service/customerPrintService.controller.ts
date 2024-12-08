@@ -24,7 +24,7 @@ import { Public } from 'src/common/decorators/public.decorators';
 
 @Public()
 // @ApiBearerAuth()
-@ApiTags('customer-print-service')
+@ApiTags('Customer Print Service')
 @Controller('customer/print-service')
 export class CustomerPrintServiceController {
   constructor(
