@@ -167,12 +167,4 @@ export const printerLocationsData = [
     hotline: '(+84) 28 12345 6789',
     description: 'Faculty of Information Technology - H6 Building',
   },
-  {
-    campusName: 'CS2',
-    buildingName: 'Nhà vận động trung tâm', // Nhà vận động trung tâm
-    roomName: 'NVĐ-01',
-    campusAdress: 'Khu đô thị Đại học Quốc Gia Tp.HCM, Thủ Đức',
-    hotline: '(+84) 28 12345 6789',
-    description: 'Central Sports Complex - Main Stadium',
-  },
 ];

@@ -211,14 +211,4 @@ export const printersData = [
     buildingName: 'H6',
     roomName: 'H6-101',
   },
-  {
-    brandName: 'Canon',
-    model: 'imageCLASS LBP226dw',
-    shortDescription: 'Monochrome laser printer, high-speed printing',
-    printerStatus: PrinterStatus.ENABLE,
-    isInProgress: false,
-    campusName: 'CS2',
-    buildingName: 'Nhà vận động trung tâm',
-    roomName: 'NVĐ-01',
-  },
 ];

@@ -29,6 +29,7 @@
     "@nestjs/jwt": "10.2.0",
     "@nestjs/passport": "10.0.3",
     "@nestjs/platform-express": "10.4.4",
+    "@nestjs/schedule": "^4.1.1",
     "@nestjs/swagger": "7.4.2",
     "@prisma/client": "5.20.0",
     "backend": "file:",
@@ -39,6 +40,7 @@
     "passport": "0.7.0",
     "passport-google-oauth20": "2.0.0",
     "passport-jwt": "4.0.1",
+    "pdf-lib": "^1.17.1",
     "queue-typescript": "^1.0.1",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1"

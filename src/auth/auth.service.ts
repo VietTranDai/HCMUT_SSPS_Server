@@ -99,17 +99,13 @@ export class AuthService {
     });
 
     if (!user) {
-      if (role != UserRole.CUSTOMER) {
-        throw new NotFoundException(AUTH_MESSAGES.USER_NOT_FOUND);
-      } else {
-        await this.userService.createUser(
-          email,
-          family_name,
-          given_name,
-          picture,
-          role,
-        );
-      }
+      await this.userService.createUser(
+        email,
+        family_name,
+        given_name,
+        picture,
+        role,
+      );
     }
 
     user = await this.prisma.user.findFirst({

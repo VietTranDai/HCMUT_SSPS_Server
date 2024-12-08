@@ -1,4 +1,9 @@
-import { DocumentStatus, PageSize, PrismaClient } from '@prisma/client';
+import {
+  DocumentStatus,
+  PageSize,
+  PrismaClient,
+  ServiceStatus,
+} from '@prisma/client';
 import { customersData } from './data/customer';
 import { UserRole } from '@prisma/client';
 import { spsoData } from './data/spso';
@@ -192,6 +197,80 @@ async function main() {
         },
       });
     }),
+  );
+
+  const serviceStatuses = ['COMPLETED', 'FAILED']; // Trạng thái dịch vụ in
+  const documents = await prisma.document.findMany(); // Lấy tất cả documents có sẵn trong database
+  const customers = await prisma.customer.findMany(); // Lấy tất cả customers có sẵn trong database
+  const printers = await prisma.printer.findMany(); // Lấy tất cả printers có sẵn trong database
+
+  if (
+    documents.length === 0 ||
+    customers.length === 0 ||
+    printers.length === 0
+  ) {
+    console.error('Documents, Customers, or Printers not found in database!');
+    return;
+  }
+
+  // Hàm tạo thời gian ngẫu nhiên trong tháng năm 2024
+  function getRandomTimeInMonth(month: number) {
+    const start = new Date(
+      `${2024}-${String(month).padStart(2, '0')}-01T00:00:00Z`,
+    ).getTime();
+    const end = new Date(
+      `${2024}-${String(month).padStart(2, '0')}-31T23:59:59Z`,
+    ).getTime();
+    return new Date(start + Math.random() * (end - start));
+  }
+
+  for (let month = 1; month <= 12; month++) {
+    console.log(
+      `Generating data for ${2024}-${String(month).padStart(2, '0')}...`,
+    );
+    await Promise.all(
+      Array.from({ length: 1000 }, async () => {
+        // Random chọn Customer, Printer, và trạng thái dịch vụ
+        const customer =
+          customers[Math.floor(Math.random() * customers.length)];
+        const printer = printers[Math.floor(Math.random() * printers.length)];
+        const serviceStatus =
+          serviceStatuses[Math.floor(Math.random() * serviceStatuses.length)];
+
+        // Random chọn Document và tính toán tổng số trang in
+        const randomDocs = Array.from(
+          { length: Math.ceil(Math.random() * 5) },
+          () => documents[Math.floor(Math.random() * documents.length)],
+        );
+        const totalPageCost = randomDocs.reduce(
+          (total, doc) => total + doc.totalCostPage,
+          0,
+        );
+
+        // Random createdAt (cũng là startTime và endTime)
+        const randomTime = getRandomTimeInMonth(month);
+
+        // Tạo bản ghi PrintServiceLog
+        await prisma.printServiceLog.create({
+          data: {
+            createdAt: randomTime,
+            customerId: customer.id,
+            printerId: printer.id,
+            startTime: randomTime,
+            endTime: serviceStatus === 'COMPLETED' ? randomTime : null, // Failed không có endTime
+            serviceStatus:
+              serviceStatus === 'COMPLETED'
+                ? ServiceStatus.COMPLETED
+                : ServiceStatus.FAILED,
+            totalPageCost,
+          },
+        });
+      }),
+    );
+  }
+
+  console.log(
+    'Successfully generated 1000 PrintServiceLog entries for November 2024.',
   );
 }
 
