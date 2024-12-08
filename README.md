@@ -326,11 +326,20 @@ Dưới đây là danh sách các tài liệu quan trọng liên quan đến d�
 - Báo cáo kiểm thử tính khả dụng (usability test) của giao diện người dùng MVP 1, bao gồm các bước và kết quả thu thập từ người dùng thử nghiệm.
 - Xem tài liệu chi tiết tại đây: [usability_test_report.pdf](docs/usability_test_report.pdf)
 
-#### 7. Hướng Dẫn Sử Dụng API
+#### 7. Giao Diện Người Dùng - MVP 2
+
+- Giao diện người dùng mẫu cho phiên bản MVP 2.
+- Xem tài liệu chi tiết tại đây: [mvp2_wireframe.pdf](docs/mvp2_wireframe.pdf)
+
+#### 8. Báo cáo hoàn thiện hệ thống và demo kết quả thực hiện
+
+- Lấy đường dẫn slide và báo cáo dự án tại đây: [final_present.pdf](docs/final_present.pdf)
+
+#### 9. Hướng Dẫn Sử Dụng API
 
 - Xem chi tiết về cách sử dụng API của hệ thống HCMUT_SSPS, bao gồm các endpoint và cách tương tác với hệ thống, bằng cách chạy server ở local sau đó vào đường dẫn [http://localhost:8080/api](http://localhost:8080/api) để xem Api document do Swagger tích hợp cung cấp.
 
-#### 8. Hướng Dẫn Cài Đặt Git, Github Và Áp Dụng GitFlow vào dự án
+#### 10. Hướng Dẫn Cài Đặt Git, Github Và Áp Dụng GitFlow vào dự án
 
 - Hướng dẫn chi tiết về cách thiết lập hệ thống kiểm soát phiên bản sử dụng Git và Github cho dự án.
 - Xem tài liệu chi tiết tại đây: [git-flow.md](docs/git-flow//git-flow.md)
