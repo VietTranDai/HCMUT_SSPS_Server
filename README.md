@@ -335,11 +335,15 @@ Dưới đây là danh sách các tài liệu quan trọng liên quan đến d�
 
 - Lấy đường dẫn slide và báo cáo dự án tại đây: [final_present.pdf](docs/final_present.pdf)
 
-#### 9. Hướng Dẫn Sử Dụng API
+#### 9. Báo cáo cuối cùng của môn học
+
+- Lấy đường dẫn slide và báo cáo dự án tại đây: [final_report.pdf](docs/final_report.pdf)
+
+#### 10. Hướng Dẫn Sử Dụng API
 
 - Xem chi tiết về cách sử dụng API của hệ thống HCMUT_SSPS, bao gồm các endpoint và cách tương tác với hệ thống, bằng cách chạy server ở local sau đó vào đường dẫn [http://localhost:8080/api](http://localhost:8080/api) để xem Api document do Swagger tích hợp cung cấp.
 
-#### 10. Hướng Dẫn Cài Đặt Git, Github Và Áp Dụng GitFlow vào dự án
+#### 11. Hướng Dẫn Cài Đặt Git, Github Và Áp Dụng GitFlow vào dự án
 
 - Hướng dẫn chi tiết về cách thiết lập hệ thống kiểm soát phiên bản sử dụng Git và Github cho dự án.
 - Xem tài liệu chi tiết tại đây: [git-flow.md](docs/git-flow//git-flow.md)
